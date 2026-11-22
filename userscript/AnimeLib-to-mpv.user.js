@@ -17,6 +17,7 @@
         if (document.getElementById('mpv-button')) return;
 
         const button = document.createElement('button');
+
         button.id = 'mpv-button';
         button.textContent = 'Открыть в mpv';
 
@@ -42,7 +43,9 @@
                 return;
             }
 
+            // Видео 1080p
             const sources = [...video.querySelectorAll('source')];
+
             const source1080 = sources.find(s =>
                 s.src.includes('_1080.mp4')
             );
@@ -51,6 +54,7 @@
                 ? source1080.src
                 : video.currentSrc || video.src;
 
+            // Поиск субтитров в track
             let subtitleUrl = '';
 
             const track = document.querySelector('video track[src]');
@@ -59,13 +63,14 @@
                 subtitleUrl = track.src;
             }
 
+            // Поиск VTT среди загруженных ресурсов браузера
             if (!subtitleUrl) {
                 const resources = performance
                     .getEntriesByType('resource')
                     .map(r => r.name);
 
                 subtitleUrl = resources.find(url =>
-                    /\\.vtt(?:\\?|$)/i.test(url)
+                    /\.vtt(?:\?|$)/i.test(url)
                 ) || '';
             }
 
@@ -74,17 +79,17 @@
                 return;
             }
 
-            if (!subtitleUrl) {
-                alert('Субтитры VTT не найдены. Включи субтитры в браузере и попробуй снова.');
-                return;
-            }
-
             const referer = location.origin + '/';
 
-            const launchUrl =
-                'mpv://open/?url=' + encodeURIComponent(videoUrl) +
-                '&sub=' + encodeURIComponent(subtitleUrl) +
-                '&referer=' + encodeURIComponent(referer);
+            let launchUrl =
+                'mpv://open/?url=' + encodeURIComponent(videoUrl);
+
+            // Субтитры передаются только если они найдены
+            if (subtitleUrl) {
+                launchUrl += '&sub=' + encodeURIComponent(subtitleUrl);
+            }
+
+            launchUrl += '&referer=' + encodeURIComponent(referer);
 
             window.location.href = launchUrl;
         };
