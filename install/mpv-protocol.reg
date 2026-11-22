@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Software\Classes\mpv]
+@="URL:mpv Protocol"
+"URL Protocol"=""
+
+[HKEY_CURRENT_USER\Software\Classes\mpv\shell\open\command]
+@="\"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -ExecutionPolicy Bypass -File \"C:\\mpv-launcher\\launch-mpv.ps1\" \"%1\""

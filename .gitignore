@@ -1,0 +1,9 @@
+# Local editor files
+.vscode/
+.idea/
+*.bak
+*.tmp
+
+# Windows
+Thumbs.db
+Desktop.ini
